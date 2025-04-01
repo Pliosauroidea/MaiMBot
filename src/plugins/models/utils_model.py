@@ -179,15 +179,15 @@ class LLM_request:
         # logger.debug(f"{logger_msg}发送请求到URL: {api_url}")
         # logger.info(f"使用模型: {self.model_name}")
 
-        # 流式输出标志
-        if stream_mode:
-            payload["stream"] = stream_mode
-
         # 构建请求体
         if image_base64:
             payload = await self._build_payload(prompt, image_base64, image_format)
         elif payload is None:
             payload = await self._build_payload(prompt)
+            
+        # 流式输出标志
+        if stream_mode:
+            payload["stream"] = stream_mode
 
         for retry in range(policy["max_retries"]):
             try:
